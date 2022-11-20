@@ -14,16 +14,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type RegisterBody struct {
-	UserID   uint   `json:"user_id"`
-	Username string ` json:"username" binding:"required"`
-	Password string ` json:"password" binding:"required"`
-	Fullname string ` json:"fullname" binding:"required"`
-	Avatar   string ` json:"avatar" binding:"required"`
-}
-
 func Register(c *gin.Context) {
-	var json RegisterBody
+	var json model.User
 	if err := c.ShouldBindJSON(&json); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -47,11 +39,12 @@ func Register(c *gin.Context) {
 		return
 	}
 	user := model.User{
-		UserID:   uint(uuid[0]),
-		Username: json.Username,
-		Password: string(hashedPassword),
-		Fullname: json.Fullname,
-		Avatar:   json.Avatar,
+		UserID:          uint(uuid[0]),
+		Username:        json.Username,
+		Password:        string(hashedPassword),
+		Email:           json.Email,
+		Role:            json.Role,
+		Picture_profile: json.Picture_profile,
 	}
 	orm.DB.Create(&user)
 	if user.ID != 0 {
@@ -97,5 +90,4 @@ func Login(c *gin.Context) {
 		}
 		c.JSON(http.StatusOK, gin.H{"message": "Login success", "status": "success", "token": t, "user": user})
 	}
-
 }

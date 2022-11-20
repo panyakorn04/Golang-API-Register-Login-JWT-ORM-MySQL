@@ -29,7 +29,6 @@ func ConnectDatabase() {
 	sqlDB.SetMaxOpenConns(100)
 	sqlDB.SetConnMaxLifetime(time.Hour)
 
- 	// Migrate the schema
+	// Migrate the schema
 	DB.AutoMigrate(&model.User{})
 }
-

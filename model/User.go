@@ -8,11 +8,12 @@ import (
 // User is a struct that represents a user
 type User struct {
 	gorm.Model
-	UserID   uint `json:"user_id"`
-	Username string
-	Password string
-	Fullname string
-	Avatar   string
+	UserID          uint   `json:"user_id"`
+	Username        string `json:"username"`
+	Password        string `json:"password"`
+	Email           string `json:"email"`
+	Role            string `json:"role"`
+	Picture_profile string `json:"picture_profile"`
 }
 
 type Claims struct {

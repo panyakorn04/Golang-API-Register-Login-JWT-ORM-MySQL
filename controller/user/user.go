@@ -19,9 +19,13 @@ func GetUsers(c *gin.Context) {
 // GetUser is a function that handles the get user request
 func GetUser(c *gin.Context) {
 	var user model.User
-	if err := orm.DB.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+	if err := orm.DB.Find(&user, c.Param("id")).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found!"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"status": "success", "data": user})
+	if user.ID != 0 {
+		c.JSON(http.StatusOK, gin.H{"status": "success", "message": "User found successfully", "data": user})
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "failed", "message": "User not found!"})
+	}
 }
